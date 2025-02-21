@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>MoeCTF2024-WP-Pwn</title>
+      <link href="/2025/02/21/MoeCTF2024-WP-Pwn/"/>
+      <url>/2025/02/21/MoeCTF2024-WP-Pwn/</url>
+      
+        <content type="html"><![CDATA[<p>西电链接</p><p><a href="https://ctf.xidian.edu.cn/">西电 CTF 终端</a></p><h1 id="NotEnoughTime"><a href="#NotEnoughTime" class="headerlink" title="NotEnoughTime"></a>NotEnoughTime</h1><p>一个练习使用pwntools的题目</p><p>会输出表达式，而且后台模拟了网络延迟状况，需要使用recvuntil</p><p>recvuntil是接收数据直到某个特点信息，注意设置时要用byte形式</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&quot;debug&quot;</span>         <span class="comment">#打开debug可以随时监控都收到了什么字符，以防recvuntil卡住或者遗漏关键信息</span></span><br><span class="line">io = remote(<span class="string">&#x27;192.168.43.76&#x27;</span>,<span class="number">2576</span>)</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line"><span class="comment">#不知道一共会有多少条，所以暂时先设置一个循环数</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>): </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;get:&quot;</span>)</span><br><span class="line">    line = io.recvuntil(<span class="string">b&#x27;=&#x27;</span>).decode()</span><br><span class="line">    <span class="keyword">if</span> line == <span class="string">&#x27;&#x27;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;[+]&#x27;</span>,line)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;=&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> line :   <span class="comment">#不是表达式</span></span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span> :</span><br><span class="line">        line = re.sub(<span class="string">&#x27;[a-zA-Z,!.]&#x27;</span>,<span class="string">&#x27;&#x27;</span>,line) <span class="comment">#接收途中会出现进入下一阶段的提示，将其删除以防止其混入表达式</span></span><br><span class="line">        ans=<span class="built_in">eval</span>(line.replace(<span class="string">&#x27;\n&#x27;</span>,<span class="string">&#x27;&#x27;</span>).replace(<span class="string">&#x27;=&#x27;</span>,<span class="string">&#x27;&#x27;</span>).replace(<span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;//&#x27;</span>))</span><br><span class="line">        io.sendline(<span class="built_in">str</span>(ans).encode())</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;done&quot;</span>)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> pwn </tag>
+            
+            <tag> CTFwp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2024NewStarCTF_WP_Web</title>
       <link href="/2024/12/28/2024NewStarCTF-WP-Web/"/>
       <url>/2024/12/28/2024NewStarCTF-WP-Web/</url>
